@@ -1,7 +1,7 @@
 import React from 'react';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {DragSource, DropTarget} from 'react-dnd';
+import {DropTarget} from 'react-dnd';
 
 import * as laneActions from '../actions/lanes';
 import * as noteActions from '../actions/notes';
