@@ -1,5 +1,4 @@
 import React from 'react';
-import uuid from 'uuid';
 import {connect} from 'react-redux';
 
 import * as laneActions from '../actions/lanes';
@@ -8,57 +7,47 @@ import * as noteActions from '../actions/notes';
 import Editable from './Editable';
 
 class LaneHeader extends React.Component {
-  constructor(props) {
-    super(props)
-    this.laneId = props.lane.id
-  }
-  addNote = (laneId, e) => {
+  addNote(laneId, e) {
     e.stopPropagation();
-    const noteId = uuid.v4();
-    this.props.createNote({
-      id: noteId,
+    const o = this.props.createNote({
       task: 'New task'
     });
-    this.props.attachToLane({laneId, noteId});
-  };
+    this.props.attachToLane(laneId, o.note.id);
+  }
 
-  activateLaneEdit = (laneId) => {
-    this.props.updateLane({
-      id: laneId,
-      editing: true
-    });
-  };
-
-  editName = (laneId, name) => {
-    this.props.updateLane({
-      id: laneId,
-      name,
-      editing: false
-    })
-  };
-
-  deleteLane = (laneId, e) => {
+  deleteLane(lane, e) {
     e.stopPropagation();
+    const laneId = lane.id;
+    lane.notes.forEach(noteId => {
+      this.props.detachFromLane(laneId, noteId);
+      this.props.deleteNote(noteId);
+    })
     this.props.deleteLane(laneId);
-  };
+  }
 
   render() {
     const {lane, ...props} = this.props
     const laneId = lane.id
     return (
-        <div className="lane-header" onClick={() => this.activateLaneEdit(laneId)} {...props}>
+        <div className="lane-header"
+          onClick={() => props.updateLane({id: laneId, editing: true})}
+        >
           <div className="lane-add-note">
-            <button onClick={(e) => this.addNote(laneId, e)}>+ Add Note</button>
+            <button onClick={this.addNote.bind(this, laneId)}>+ Add Note</button>
           </div>
-          <Editable className="lane-name" editing={lane.editing} value={lane.name} onEdit={(name) => this.editName(laneId, name)} />
+          <Editable className="lane-name"
+            editing={lane.editing}
+            value={lane.name}
+            onEdit={(name) => props.updateLane({id: laneId, name, editing: false})}
+          />
           <div className="lane-delete">
-            <button onClick={() => this.deleteLane(laneId)}>x</button>
+            <button onClick={this.deleteLane.bind(this, lane)}>x</button>
           </div>
         </div>
     );
   }
 }
-export default connect(state => state, {
+export default connect(() => ({}), {
   ...laneActions,
   ...noteActions
 })(LaneHeader)

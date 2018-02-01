@@ -1,6 +1,4 @@
-const initialState = []
-
-export default function notes(state=initialState, action) {
+export default function notes(state=[], action) {
   switch(action.type) {
     case 'CREATE_NOTE':
       return [...state, action.note]

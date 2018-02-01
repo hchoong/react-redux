@@ -1,8 +1,12 @@
-export function createLane(lane) {
+import uuid from 'uuid';
+
+export function createLane(lane={}) {
   return {
     type: 'CREATE_LANE',
     lane: {
+      id: uuid.v4(),
       notes: lane.notes || [],
+      name: lane.name || 'New lane',
       ...lane
     }
   }
@@ -22,7 +26,7 @@ export function deleteLane(id) {
   }
 }
 
-export function attachToLane({laneId, noteId}) {
+export function attachToLane(laneId, noteId) {
   return {
     type: 'ATTACH_LANE',
     laneId,

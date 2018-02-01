@@ -1,7 +1,12 @@
+import uuid from 'uuid';
+
 export function createNote(note) {
   return {
     type: 'CREATE_NOTE',
-    note
+    note: {
+      id: uuid.v4(),
+      ...note
+    }
   }
 }
 export function updateNote(updatedNote) {

@@ -1,7 +1,5 @@
 import React from 'react';
-
 import classnames from 'classnames';
-
 
 const Editable = ({editing, value, onEdit, className}) => {
   if(editing) {

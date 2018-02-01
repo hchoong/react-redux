@@ -1,9 +1,6 @@
 import update from 'react-addons-update'
-import * as types from '../actions/lanes'
 
-const initialState = []
-
-export default function lanes(state=initialState, action) {
+export default function lanes(state=[], action) {
   switch(action.type) {
     case 'CREATE_LANE':
       return [...state, action.lane];
@@ -11,7 +8,7 @@ export default function lanes(state=initialState, action) {
       var {type, ...updatedLane} = action
       return state.map(lane => {
         if(lane.id === action.id) {
-          return {...lane, updatedLane}
+          return Object.assign({}, lane, updatedLane);
         }
         return lane;
       });
@@ -83,6 +80,7 @@ export default function lanes(state=initialState, action) {
                 .concat(lane.notes.slice(targetNoteIndex))
             }
           }
+          return lane
         })
       }
     default:

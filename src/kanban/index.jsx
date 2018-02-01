@@ -6,7 +6,8 @@ import libStorage from './libs/storage';
 
 import configureStore from './configureStore';
 
-import App from './components/App';
+import App from './containers/App';
+import './main.css';
 
 const APP_STORAGE = 'redux_kanban';
 const storage = libStorage(localStorage)
@@ -21,7 +22,7 @@ store.subscribe(() => {
 export default () =>
 ReactDOM.render(
   <Provider store={store}>
-    <div></div>
+    <App />
   </Provider>,
-  document.getElementById('app')
-);
+  document.getElementById('root')
+)
